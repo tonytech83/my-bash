@@ -197,3 +197,4 @@ lazyg() {
 # Set the Oh My Posh
 #######################################################
 eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh-theme/tt-thenme-1.omp.json)"
+eval "$(zoxide init bash)"
