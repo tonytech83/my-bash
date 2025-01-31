@@ -21,8 +21,7 @@ if [ -d "$MYBASHFOLDER" ]; then rm -rf "$MYBASHFOLDER"; fi
 
 # Clone the mybash repository into the my-bash directory
 echo "${YELLOW}Cloning mybash repository into:$MYBASHFOLDER${RC}"
-git clone https://github.com/tonytech83/my-bash "$MYBASHFOLDER"
-if [ $? -eq 0 ]; then
+if git clone https://github.com/tonytech83/my-bash "$MYBASHFOLDER"; then
     echo "${GREEN}Successfully cloned my-bash repository${RC}"
 else
     echo "${RED}Failed to clone my-bash repository${RC}"
@@ -130,11 +129,11 @@ installDepend() {
             echo "No AUR helper found. Please install yay or paru."
             exit 1
         fi
-        ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES}
+        "${AUR_HELPER}" --noconfirm -S "${DEPENDENCIES}"
     elif [ "$PACKAGER" = "dnf" ]; then
-        ${SUDO_CMD} ${PACKAGER} install -y ${DEPENDENCIES}
+        ${SUDO_CMD} ${PACKAGER} install -y "${DEPENDENCIES}"
     else
-        ${SUDO_CMD} ${PACKAGER} install -yq ${DEPENDENCIES}
+        ${SUDO_CMD} ${PACKAGER} install -yq "${DEPENDENCIES}"
     fi
 
     # Check if the JetBrains Nerd Font is installed
@@ -149,7 +148,7 @@ installDepend() {
         # Check if the font URL is accessible
         if wget -q --spider "$FONT_URL"; then
             TEMP_DIR=$(mktemp -d)
-            wget -q --show-progress $FONT_URL -O "$TEMP_DIR"/"${FONT_NAME}".zip
+            wget -q --show-progress "$FONT_URL" -O "$TEMP_DIR"/"${FONT_NAME}".zip
             unzip "$TEMP_DIR"/"${FONT_NAME}".zip -d "$TEMP_DIR"
             mkdir -p "$FONT_DIR"/"$FONT_NAME"
             mv "${TEMP_DIR}"/*.ttf "$FONT_DIR"/"$FONT_NAME"
@@ -261,7 +260,7 @@ create_fastfetch_config
 
 # Link configuration and provide feedback
 if linkConfig; then
-    echo "${GREEN}Done!\nrestart your shell to see the changes.${RC}"
+    printf "${GREEN}Done!\nRestart your shell to see the changes.${RC}\n"
 else
     echo "${RED}Something went wrong!${RC}"
 fi
