@@ -106,10 +106,11 @@ checkEnv() {
 
 # Function to install dependencies
 installDepend() {
-    # List of dependencies to install
-    DEPENDENCIES='bash bash-completion tree fastfetch wget unzip fontconfig'
+    # List of dependencies to install (space-separated, not quoted)
+    DEPENDENCIES="bash bash-completion tree fastfetch wget unzip fontconfig"
 
     echo "${YELLOW}Installing dependencies...${RC}"
+    
     if [ "$PACKAGER" = "pacman" ]; then
         # Install AUR helper if not present
         if ! command_exists yay && ! command_exists paru; then
@@ -120,6 +121,7 @@ installDepend() {
         else
             echo "AUR helper already installed"
         fi
+
         # Determine which AUR helper to use
         if command_exists yay; then
             AUR_HELPER="yay"
@@ -129,13 +131,16 @@ installDepend() {
             echo "No AUR helper found. Please install yay or paru."
             exit 1
         fi
-        "${AUR_HELPER}" --noconfirm -S "${DEPENDENCIES}"
-    elif [ "$PACKAGER" = "dnf" ]; then
-        ${SUDO_CMD} ${PACKAGER} install -y "${DEPENDENCIES}"
-    else
-        ${SUDO_CMD} ${PACKAGER} install -yq "${DEPENDENCIES}"
-    fi
+        "${AUR_HELPER}" --noconfirm -S ${DEPENDENCIES}
 
+    elif [ "$PACKAGER" = "dnf" ]; then
+        ${SUDO_CMD} ${PACKAGER} install -y ${DEPENDENCIES}
+    else
+        ${SUDO_CMD} ${PACKAGER} install -yq ${DEPENDENCIES}
+    fi
+}
+
+installFont() {
     # Check if the JetBrains Nerd Font is installed
     FONT_NAME="JetBrainsMono"
     if fc-list :family | grep -iq "$FONT_NAME"; then
@@ -253,6 +258,7 @@ linkConfig() {
 # Execute the functions in order
 checkEnv
 installDepend
+installFont
 installOhMyPosh
 installFzf
 installZoxide
