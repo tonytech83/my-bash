@@ -60,6 +60,70 @@ alias la='ls -Alh'                # show hidden files
 alias ls='ls -aFh --color=always' # add colors and file type extensions
 
 #######################################################
+# SPECIAL FUNCTIONS
+#######################################################
+# Show the current version of the operating system
+ver() {
+    local dtype
+    dtype=$(distribution)
+
+    case $dtype in
+        "redhat")
+            if [ -s /etc/redhat-release ]; then
+                cat /etc/redhat-release
+            else
+                cat /etc/issue
+            fi
+            uname -a
+            ;;
+        "suse")
+            cat /etc/SuSE-release
+            ;;
+        "debian")
+            lsb_release -a
+            ;;
+        "gentoo")
+            cat /etc/gentoo-release
+            ;;
+        "arch")
+            cat /etc/os-release
+            ;;
+        "slackware")
+            cat /etc/slackware-version
+            ;;
+        *)
+            if [ -s /etc/issue ]; then
+                cat /etc/issue
+            else
+                echo "Error: Unknown distribution"
+                exit 1
+            fi
+            ;;
+    esac
+}
+
+function whatsmyip () {
+    # Internal IP Lookup.
+    if command -v ip &> /dev/null; then
+        echo -n "Internal IP: "
+        ip addr show wlan0 | grep "inet " | awk '{print $2}' | cut -d/ -f1
+    else
+        echo -n "Internal IP: "
+        ifconfig wlan0 | grep "inet " | awk '{print $2}'
+    fi
+
+    # External IP Lookup
+    echo -n "External IP: "
+    curl -s ifconfig.me
+}
+
+lazyg() {
+	git add .
+	git commit -m "$1"
+	git push
+}
+
+#######################################################
 # Set the Oh My Posh
 #######################################################
 eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh-theme/tt-thenme-1.omp.json)"
