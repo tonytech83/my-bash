@@ -186,6 +186,23 @@ lazyg() {
 	git push
 }
 
+btc() {
+    BTC_ORANGE='\033[38;5;208m'
+    RC='\033[0m'
+
+    echo "Fetching BTC price..."
+    json_data=$(curl -s "https://api.coindesk.com/v1/bpi/currentprice.json")
+
+    # Extract the USD rate using jq
+    usd_rate=$(echo "$json_data" | jq -r '.bpi.USD.rate')
+
+    # Define the icon
+    icon=""
+
+    # Output the icon in color followed by the USD rate
+    printf "${BTC_ORANGE}%s${RC} %s\n" "$icon" "$usd_rate"
+}
+
 #######################################################
 # Set the Oh My Posh
 #######################################################
