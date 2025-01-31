@@ -6,6 +6,8 @@
 # EXPORTS
 #######################################################
 
+export PATH=$PATH:"$HOME/.local/bin
+
 # Disable the terminal bell (beep sound)
 if [[ $iatest -gt 0 ]]; then bind "set bell-style visible"; fi
 
@@ -124,13 +126,6 @@ distribution () {
     echo $dtype
 }
 
-
-DISTRIBUTION=$(distribution)
-if [ "$DISTRIBUTION" = "redhat" ] || [ "$DISTRIBUTION" = "arch" ]; then
-      alias cat='bat'
-else
-      alias cat='batcat'
-fi
 
 # Show the current version of the operating system
 ver() {
