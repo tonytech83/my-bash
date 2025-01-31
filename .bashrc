@@ -31,6 +31,9 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 
+# Seeing as other scripts will use it might as well export it
+export MYBASHFOLDER="$HOME/.my-bash"
+
 # Ignore case on auto-completion
 if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
 
@@ -62,6 +65,73 @@ alias ls='ls -aFh --color=always' # add colors and file type extensions
 #######################################################
 # SPECIAL FUNCTIONS
 #######################################################
+# Show the current distribution
+distribution () {
+    local dtype="unknown"  # Default to unknown
+
+    # Use /etc/os-release for modern distro identification
+    if [ -r /etc/os-release ]; then
+        source /etc/os-release
+        case $ID in
+            fedora|rhel|centos)
+                dtype="redhat"
+                ;;
+            sles|opensuse*)
+                dtype="suse"
+                ;;
+            ubuntu|debian)
+                dtype="debian"
+                ;;
+            gentoo)
+                dtype="gentoo"
+                ;;
+            arch|manjaro)
+                dtype="arch"
+                ;;
+            slackware)
+                dtype="slackware"
+                ;;
+            *)
+                # Check ID_LIKE only if dtype is still unknown
+                if [ -n "$ID_LIKE" ]; then
+                    case $ID_LIKE in
+                        *fedora*|*rhel*|*centos*)
+                            dtype="redhat"
+                            ;;
+                        *sles*|*opensuse*)
+                            dtype="suse"
+                            ;;
+                        *ubuntu*|*debian*)
+                            dtype="debian"
+                            ;;
+                        *gentoo*)
+                            dtype="gentoo"
+                            ;;
+                        *arch*)
+                            dtype="arch"
+                            ;;
+                        *slackware*)
+                            dtype="slackware"
+                            ;;
+                    esac
+                fi
+
+                # If ID or ID_LIKE is not recognized, keep dtype as unknown
+                ;;
+        esac
+    fi
+
+    echo $dtype
+}
+
+
+DISTRIBUTION=$(distribution)
+if [ "$DISTRIBUTION" = "redhat" ] || [ "$DISTRIBUTION" = "arch" ]; then
+      alias cat='bat'
+else
+      alias cat='batcat'
+fi
+
 # Show the current version of the operating system
 ver() {
     local dtype
