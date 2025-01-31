@@ -107,7 +107,7 @@ checkEnv() {
 # Function to install dependencies
 installDepend() {
     # List of dependencies to install (space-separated, not quoted)
-    DEPENDENCIES="bash bash-completion tree fastfetch wget unzip fontconfig"
+    DEPENDENCIES="bash bash-completion tree wget unzip fontconfig"
 
     echo "${YELLOW}Installing dependencies...${RC}"
     
@@ -173,6 +173,14 @@ installOhMyPosh() {
     if command_exists oh-my-posh; then
         echo "Oh My Posh already installed"
         return
+    fi
+
+    # Check if the ./local/bin exists
+    LOCALBINFOLDER="$HOME/.local/bin"
+    if [ ! -d "$LOCALBINFOLDER" ]; then
+        echo "${YELLOW}Creating directory: $LOCALBINFOLDER${RC}"
+        mkdir -p "$LOCALBINFOLDER"
+        echo "${GREEN}my-bash directory created: $LOCALBINFOLDER${RC}"
     fi
 
     # Install Oh My Posh
@@ -246,11 +254,6 @@ linkConfig() {
     echo "${YELLOW}Linking new bash config file...${RC}"
     ln -svf "$GITPATH/.bashrc" "$USER_HOME/.bashrc" || {
         echo "${RED}Failed to create symbolic link for .bashrc${RC}"
-        exit 1
-    }
-    # Link the Oh My Posh theme file
-    ln -svf "$GITPATH/tt-thenme-1.omp.json" "$USER_HOME/.config/oh-my-posh-theme/tt-thenme-1.omp.json" || {
-        echo "${RED}Failed to create symbolic link for tt-thenme-1.omp.json${RC}"
         exit 1
     }
 }
