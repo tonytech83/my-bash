@@ -132,4 +132,4 @@ if ! shopt -oq posix; then
 fi
 
 # Load Oh My Posh
-eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh-theme/my_theme_new.omp.json)"
+eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh-theme/tt-thenme-1.omp.json)"

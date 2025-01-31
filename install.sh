@@ -188,7 +188,7 @@ installZoxide() {
 create_fastfetch_config() {
     ## Get the correct user home directory.
     USER_HOME=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
-    
+
     if [ ! -d "$USER_HOME/.config/fastfetch" ]; then
         mkdir -p "$USER_HOME/.config/fastfetch"
     fi
@@ -205,6 +205,7 @@ create_fastfetch_config() {
 linkConfig() {
     ## Get the correct user home directory.
     USER_HOME=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
+
     ## Check if a bashrc file is already there.
     OLD_BASHRC="$USER_HOME/.bashrc"
     if [ -e "$OLD_BASHRC" ]; then
@@ -215,11 +216,15 @@ linkConfig() {
         fi
     fi
 
-    echo "${YELLOW}Linking new bash config file...${RC}"
-    ln -svf "$GITPATH/.bashrc" "$USER_HOME/.bashrc" || {
-        echo "${RED}Failed to create symbolic link for .bashrc${RC}"
-        exit 1
-    }
+	echo "${YELLOW}Linking new bash config file...${RC}"
+    	ln -svf "$GITPATH/.bashrc" "$USER_HOME/.bashrc" || {
+        	echo "${RED}Failed to create symbolic link for .bashrc${RC}"
+        	exit 1
+    	}
+	ln -svf "$GITPATH/tt-thenme-1.omp.json" "$USER_HOME/.config/oh-my-posh-theme/tt-thenme-1.omp.json" || {
+		echo "${RED}Failed to create symbolic link for tt-thenme-1.omp.json${RC}"
+        	exit 1
+    	}
 }
 
 checkEnv
