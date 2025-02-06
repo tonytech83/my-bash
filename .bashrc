@@ -206,5 +206,5 @@ btc() {
 #######################################################
 # Set the Oh My Posh
 #######################################################
-eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh-theme/tt-thenme-1.omp.json)"
+eval "$(oh-my-posh init bash --config ~/.my-bash/tt-thenme-1.omp.json)"
 eval "$(zoxide init bash)"
